@@ -11,7 +11,23 @@ Possible future components (no promises):
 
 ## Setup your environment
 
-NOTE: Conda is shown but any other python env manager should be fine
+NOTE: Conda and uv are shown below, but any other python env manager should be fine
+
+### Option 1: uv
+
+Go [here](https://docs.astral.sh/uv/getting-started/installation/) to install `uv`.
+
+Then, create an environment and install dependencies:
+
+```console
+export PTYHONPATH=${PWD}
+uv venv --python 3.14
+source .venv/bin/activate
+uv pip install -r requirements.txt pytest
+uv pip install -e .
+```
+
+### Option 2: conda
 
 Go [here](https://docs.conda.io/en/latest/miniconda.html) to install the latest version of miniconda.
 
@@ -50,6 +66,26 @@ to start the Grobid server. Don't worry if it gets stuck at 87%; this is normal 
 
 The expected port for the Grobid service is 8070, but you can change this as well. Make sure to edit the port in both the Grobid config file as well as `grobid/grobid_client.py`.
 
+#### Alternative: run Grobid with `docker-compose`
+
+If you'd rather not build Grobid from source, this repo includes a [docker-compose.yml](docker-compose.yml) that runs Grobid in a container:
+
+```console
+docker-compose up -d
+```
+
+This starts Grobid on port 8070 (with the admin port on 8071), matching the defaults expected by `grobid/grobid_client.py`. Check it's up with:
+
+```console
+curl http://localhost:8070/api/isalive
+```
+
+To stop the container:
+
+```console
+docker-compose down
+```
+
 ### Process a PDF
 
 There are a couple of test PDFs in `tests/input/` if you'd like to try with that.
@@ -58,6 +94,10 @@ For example, you can try:
 
 ```console
 python doc2json/grobid2json/process_pdf.py -i tests/pdf/N18-3011.pdf -t temp_dir/ -o output_dir/
+
+
+# PLE Paper Example
+uv run python doc2json/grobid2json/process_pdf.py -i tests/pdf/ple-paper.pdf -t /tmp -o output_dir
 ```
 
 This will generate a JSON file in the specified `output_dir`. If unspecified, the file will be in the `output/` directory from your path.
