@@ -20,7 +20,7 @@ Go [here](https://docs.astral.sh/uv/getting-started/installation/) to install `u
 Then, create an environment and install dependencies:
 
 ```console
-export PTYHONPATH=${PWD}
+export PYTHONPATH=${PWD}
 uv venv --python 3.14
 source .venv/bin/activate
 uv pip install -r requirements.txt pytest
